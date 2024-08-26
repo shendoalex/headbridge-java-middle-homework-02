@@ -13,10 +13,9 @@ public class StudentGrades {
 
     private static final String STUDENT_NOT_FOUND = "Учащийся с именем: %s не найден";
     private static final String STUDENT_ALREADY_EXISTS = "Учащийся с именем: %s уже существует";
+    private final Map<String, List<Integer>> studentGrades;
     private String studentName;
     private int studentGrade;
-
-    private Map<String, List<Integer>> studentGrades;
 
     public StudentGrades() {
         studentGrades = new HashMap<>();
@@ -92,7 +91,7 @@ public class StudentGrades {
     }
 
     public void saveStudentGradesToFile(String fileName) {
-        try (PrintWriter pw = new PrintWriter(new File(fileName))) {
+        try (PrintWriter pw = new PrintWriter(fileName)) {
             for (Map.Entry<String, List<Integer>> entry : studentGrades.entrySet()) {
                 pw.println(entry.getKey());
                 for (Integer grade : entry.getValue()) {
