@@ -14,72 +14,61 @@ public class StudentGrades {
     private static final String STUDENT_NOT_FOUND = "Учащийся с именем: %s не найден";
     private static final String STUDENT_ALREADY_EXISTS = "Учащийся с именем: %s уже существует";
     private final Map<String, List<Integer>> studentGrades;
-    private String studentName;
-    private int studentGrade;
 
     public StudentGrades() {
         studentGrades = new HashMap<>();
     }
 
-    private boolean checkStudentNameIsValid() {
-        return studentName != null && !studentName.isEmpty();
+    private boolean isStudentNameValid(String studentName) {
+        return studentName == null || studentName.isEmpty();
     }
 
-    private boolean checkStudentGradeIsValid() {
+    private boolean isStudentGradeValid(int studentGrade) {
         return studentGrade >= 0 && studentGrade <= 100;
     }
 
     public void addStudent(String studentName) {
-        this.studentName = studentName;
-        if (checkStudentNameIsValid()) {
-            if (!studentGrades.containsKey(studentName)) {
-                studentGrades.putIfAbsent(studentName, new ArrayList<>());
-            } else {
-                System.out.printf(STUDENT_ALREADY_EXISTS, studentName);
-            }
+        if (isStudentNameValid(studentName)) {
+            throw new IllegalArgumentException("Invalid student name");
+        }
+        if (!studentGrades.containsKey(studentName)) {
+            studentGrades.putIfAbsent(studentName, new ArrayList<>());
         } else {
-            throw new IllegalArgumentException();
+            System.out.printf(STUDENT_ALREADY_EXISTS, studentName);
         }
     }
 
     public void deleteStudent(String studentName) {
-        this.studentName = studentName;
-        if (checkStudentNameIsValid()) {
-            if (!studentGrades.containsKey(studentName)) {
-                studentGrades.remove(studentName);
-            } else {
-                System.out.printf(STUDENT_ALREADY_EXISTS, studentName);
-            }
+        if (isStudentNameValid(studentName)) {
+            throw new IllegalArgumentException("Invalid student name");
+        }
+        if (studentGrades.containsKey(studentName)) {
+            studentGrades.remove(studentName);
         } else {
-            throw new IllegalArgumentException();
+            System.out.printf(STUDENT_NOT_FOUND, studentName);
         }
     }
 
     public void addStudentGrade(String studentName, int grade) {
-        this.studentName = studentName;
-        this.studentGrade = grade;
-        if (checkStudentNameIsValid() && checkStudentGradeIsValid()) {
-            if (studentGrades.containsKey(studentName)) {
-                studentGrades.get(studentName).add(grade);
-            } else {
-                System.out.printf(STUDENT_NOT_FOUND, studentName);
-            }
+        if (isStudentNameValid(studentName) || !isStudentGradeValid(grade)) {
+            throw new IllegalArgumentException("Invalid student name or grade");
+        }
+        if (studentGrades.containsKey(studentName)) {
+            studentGrades.get(studentName).add(grade);
         } else {
-            throw new IllegalArgumentException();
+            System.out.printf(STUDENT_NOT_FOUND, studentName);
         }
     }
 
     public void printStudentGrades(String studentName) {
-        this.studentName = studentName;
-        if (checkStudentNameIsValid()) {
-            if (studentGrades.containsKey(studentName)) {
-                System.out.println("Имя: " + studentName);
-                System.out.println("Оценки: " + studentGrades.get(studentName));
-            } else {
-                System.out.printf(STUDENT_NOT_FOUND, studentName);
-            }
+        if (isStudentNameValid(studentName)) {
+            throw new IllegalArgumentException("Invalid student name");
+        }
+        if (studentGrades.containsKey(studentName)) {
+            System.out.println("Имя: " + studentName);
+            System.out.println("Оценки: " + studentGrades.get(studentName));
         } else {
-            throw new IllegalArgumentException();
+            System.out.printf(STUDENT_NOT_FOUND, studentName);
         }
     }
 
